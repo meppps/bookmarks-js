@@ -64,11 +64,29 @@ function fetch(){
     }
 };
 
+
+function initRm(){
+
+    var rmBtns = document.querySelectorAll('.remove');
+    rmBtns.forEach((rm)=>{
+        rm.addEventListener('click',()=>{
+            var url = rm.parentElement.childNodes[3].innerText;
+            remove(url);
+
+            document.querySelector('table.bookmarkTable').remove();
+            showBookmarks();
+
+            console.log(fetch())
+        })
+    });
+};
+
 function showBookmarks(){
     var bookmarks = fetch();
     console.log(bookmarks);
 
     var table = document.createElement('table');
+    table.classList.add('bookmarkTable');
     table.innerHTML = `
     <tr><th>Site</th><th>Page</th><th>URL</th></tr>
     `
@@ -81,9 +99,9 @@ function showBookmarks(){
         `;
         table.appendChild(row)
 
-    })
+    });
+    initRm();
 }
-
 
 
 
@@ -111,19 +129,13 @@ function remove(url){
 fetchBtn.addEventListener('click',()=>{
     showBookmarks();
 
-    var rmBtns = document.querySelectorAll('.remove');
-    rmBtns.forEach((rm)=>{
-        rm.addEventListener('click',()=>{
-            var url = rm.parentElement.childNodes[3].innerText;
-            remove(url);
-            console.log(fetch())
-        })
-    })
-
-        
-    })
+ 
+    });
 
 // 
 addBtn.addEventListener('click',()=>{
     addBookMark();
-})
+    document.querySelector('table.bookmarkTable').remove();
+    showBookmarks();
+
+});
