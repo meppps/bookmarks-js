@@ -1,6 +1,7 @@
 
 var mainBtn = document.createElement('div');
 var fetchBtn = document.createElement('div');
+var addBtn = document.createElement('div');
 
 var background = '#f4f4f4';
 var width = '30';
@@ -8,15 +9,23 @@ var height = '30';
 
 
 
-mainBtn.style.cssText = `background: ${background}; width: ${width}px; height: ${height}px; position: fixed;bottom:0;left: 0;`;
+mainBtn.style.cssText = `background: ${background}; width: ${width}px; height: ${height}px; position: fixed;bottom:0;left: 0;color:black`;
+
+addBtn.style.cssText = `background: green;width:${width}px;height:${height}px;position: fixed; top: 20;right:0;
+`;
 
 
 fetchBtn.style.cssText = `background: ${'red'};width:${width}px;height:${height}px;position: fixed; top: 10;left:0;
 `;
 
+addBtn.innerHTML = 'add';
+fetchBtn.innerHTML = 'show';
+mainBtn.innerHTML = 'M';
+
 
 document.body.appendChild(mainBtn);
 document.body.appendChild(fetchBtn);
+document.body.appendChild(addBtn);
 
 function addBookMark(){
     
@@ -53,11 +62,9 @@ function fetch(){
     // console.log(localStorage.getItem('bookmarks'))
         return item;
     }
-}
+};
 
-
-
-fetchBtn.addEventListener('click',()=>{
+function showBookmarks(){
     var bookmarks = fetch();
     console.log(bookmarks);
 
@@ -70,15 +77,53 @@ fetchBtn.addEventListener('click',()=>{
     bookmarks.forEach((mark)=>{
         var row = document.createElement('tr');
         row.innerHTML = `
-        <td>${mark.site}</td><td>${mark.title}</td><td>${mark.url}</td>
+        <td>${mark.site}</td><td>${mark.title}</td><td>${mark.url}</td><td class="remove">X</td>
         `;
         table.appendChild(row)
 
     })
+}
 
-})
+
+
+
+function remove(url){
+
+    var bookmarks = fetch();
+
+    for(i=0;i<bookmarks.length;i++){
+
+        var bm = bookmarks[i];
+        // console.log(bm.url)
+        if(url === bm.url){
+            bookmarks.splice(i,1);
+            localStorage.setItem('bookmarks',JSON.stringify(bookmarks));
+            return;
+        }
+
+        
+    }
+    
+}
+
+
+
+fetchBtn.addEventListener('click',()=>{
+    showBookmarks();
+
+    var rmBtns = document.querySelectorAll('.remove');
+    rmBtns.forEach((rm)=>{
+        rm.addEventListener('click',()=>{
+            var url = rm.parentElement.childNodes[3].innerText;
+            remove(url);
+            console.log(fetch())
+        })
+    })
+
+        
+    })
 
 // 
-mainBtn.addEventListener('click',()=>{
+addBtn.addEventListener('click',()=>{
     addBookMark();
 })
