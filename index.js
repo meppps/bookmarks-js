@@ -43,26 +43,29 @@ function addBookMark(){
 
     console.log(bookmark);
 
-    if(localStorage.getItem('bookmarks') == null){
+    function fetch(){
+        // 
+        var test = chrome.storage.sync.get(['test'],(data)=>{
+            // console.log(JSON.parse(data))
+            console.log(JSON.parse(data.test))
+        })
+            return item;
+        }
+    };
+
+
+    if(chrome.storage.sync.get(['bookmarks']) == null){
         var bookmarks = []
         bookmarks.push(bookmark);
-        localStorage.setItem('bookmarks',JSON.stringify(bookmarks));
+        chrome.storage.sync.set({bookmarks:JSON.stringify(bookmarks)});
     } else {
-        var bookmarks = JSON.parse(localStorage.getItem('bookmarks'));
+        var bookmarks = JSON.parse(chrome.storage.sync.get(['bookmarks']));
         bookmarks.push(bookmark);
-        localStorage.setItem('bookmarks',JSON.stringify(bookmarks));
+        chrome.storage.sync.set({bookmarks:JSON.stringify(bookmarks)});
     }
 };
 
-function fetch(){
-    // 
-    if(localStorage.getItem('bookmarks')){
-        var item = JSON.parse(localStorage.getItem('bookmarks'));
-        // console.log(item)
-    // console.log(localStorage.getItem('bookmarks'))
-        return item;
-    }
-};
+
 
 
 function initRm(){
@@ -115,7 +118,7 @@ function remove(url){
         // console.log(bm.url)
         if(url === bm.url){
             bookmarks.splice(i,1);
-            localStorage.setItem('bookmarks',JSON.stringify(bookmarks));
+            chrome.storage.sync.get('bookmarks',JSON.stringify(bookmarks));
             return;
         }
 

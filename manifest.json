@@ -1,0 +1,19 @@
+{
+    "name": "Bookworm",
+    "version": "1.0.0",
+    "description": "Save easily accesible bookmarks across devices",
+    "permissions": ["storage"],
+    "background": {
+      "scripts": ["index.js"],
+      "persistent": false
+    },
+    "manifest_version": 2,
+    "content_scripts": [
+      {
+        "matches": [
+          "<all_urls>"
+        ],
+        "js": ["index.js"]
+      }
+    ]
+  }
