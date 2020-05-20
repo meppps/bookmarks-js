@@ -23,8 +23,8 @@ var bookmark2 = {
 
 var firstBMS = [bookmark1,bookmark2];
 
-chrome.storage.sync.set({bookmarks:JSON.stringify(firstBMS)});
-chrome.storage.sync.get(['bookmarks'],(data)=>{console.log(data)});
+// chrome.storage.sync.set({bookmarks:JSON.stringify(firstBMS)});
+// chrome.storage.sync.get(['bookmarks'],(data)=>{console.log(data)});
 // console.log(bookmarks)
 // }
 // initBm();
@@ -52,37 +52,37 @@ document.body.appendChild(addBtn);
 
 function addBookMark(){
     
-    const site = window.location.host;
-    const title = document.title;
-    const url = window.location.href;
+    // const site = window.location.host;
+    // const title = document.title;
+    // const url = window.location.href;
     
-    // console.log(url)
-    var bookmark = {
-        site: site,
-        title: title,
-        url: url
-    }; 
+    // // console.log(url)
+    // var bookmark = {
+    //     site: site,
+    //     title: title,
+    //     url: url
+    // }; 
 
 
-    console.log(site,title,url);
+    // console.log(site,title,url);
 
 
     
-    // Add Bookmark
-    chrome.storage.sync.get(['bookmarks'],(data)=>{
+    // // Add Bookmark
+    // chrome.storage.sync.get(['bookmarks'],(data)=>{
 
         
-        if(data.bookmarks){
-            var bookmarks = JSON.parse(data.bookmarks);
-            bookmarks.push(bookmark);
-            chrome.storage.sync.set({test:JSON.stringify(bookmarks)});
-        }else{
-            var bookmarks = [];
-            bookmarks.push(bookmark);
-            chrome.storage.sync.set({test:JSON.stringify(bookmarks)});
-        }
+    //     if(data.bookmarks){
+    //         var bookmarks = JSON.parse(data.bookmarks);
+    //         bookmarks.push(bookmark);
+    //         chrome.storage.sync.set({test:JSON.stringify(bookmarks)});
+    //     }else{
+    //         var bookmarks = [];
+    //         bookmarks.push(bookmark);
+    //         chrome.storage.sync.set({test:JSON.stringify(bookmarks)});
+    //     }
 
-    });
+    // });
 
 
 };
@@ -93,6 +93,7 @@ function addBookMark(){
 
 function showBookmarks(bookmarks){
     console.log('%c show bookmarks', 'color: yellow');
+
     chrome.storage.sync.get(['bookmarks'],(data)=>{
         console.log(data)
 
@@ -120,31 +121,58 @@ function showBookmarks(bookmarks){
 
 // document.addEventListener('load',()=>{
 
-    fetchBtn.addEventListener('click',()=>{
-        console.log('hfdshaf;lkjs')
-        showBookmarks();
-        });
+// }
 
+function selectRMS(rmBtns){
+    console.log(rmBtns);
+    rmBtns.forEach((rm)=>{
+        console.log(rm);
+        rm.addEventListener('click',()=>{
+            console.log('Remove');
+            var url = rm.parentElement.childNodes[3].innerText;
+            remove(url);
+            rm.parentElement.remove();
+                return;
+            })});
+        };    
 
 
 function initRm(){
 
-    var rmBtns = document.querySelectorAll('.remove');
-    rmBtns.forEach((rm)=>{
-        rm.addEventListener('click',()=>{
-            var url = rm.parentElement.childNodes[3].innerText;
-            remove(url);
-            if(document.querySelector('table.bookmarkTable')){
-                document.querySelector('table.bookmarkTable').remove();
+    var rmBtns = document.querySelectorAll('td.remove');
+    if(rmBtns.length === 0){
+        setInterval(()=>{
+            var rmBtns = document.querySelectorAll('td.remove');
+            if(! rmBtns.length === 0){
+                console.log(rmBtns);
+                console.log(rmBtns);
+            rmBtns.forEach((rm)=>{
+                console.log(rm);
+                rm.addEventListener('click',()=>{
+                    console.log('Remove');
+                    var url = rm.parentElement.childNodes[3].innerText;
+                    remove(url);
+                        return;
+                    })});
             }
-            showBookmarks();
 
-            // console.log(fetch())
-        })
-    });
+        },100)
+    }else{
+    console.log('RM BUTTONS LENGTH != 0');
+    selectRMS(rmBtns);
+        
+    }
 };
-    // 
+    
+            
+            // showBookmarks();
 
+
+    fetchBtn.addEventListener('click',()=>{
+        console.log('hfdshaf;lkjs')
+        showBookmarks();
+        initRm();
+        });
 
 
 
@@ -184,9 +212,64 @@ function clearTable(){
 
 // 
 addBtn.addEventListener('click',()=>{
-    addBookMark();
+    // addBookMark();
+    const site = window.location.host;
+    const title = document.title;
+    const url = window.location.href;
+    
+    // console.log(url)
+    var bookmark = {
+        site: site,
+        title: title,
+        url: url
+    }; 
+
+
+    // console.log(site,title,url);
+    // console.log(bookmark);
+
+
+    
+    // Add Bookmark
+    chrome.storage.sync.get(['bookmarks'],(data)=>{
+
+        
+        if(data.bookmarks){
+            var bookmarks = JSON.parse(data.bookmarks);
+            bookmarks.push(bookmark);
+            chrome.storage.sync.set({bookmarks:JSON.stringify(bookmarks)});
+        }else{
+            var bookmarks = [];
+            bookmarks.push(bookmark);
+            chrome.storage.sync.set({bookmarks:JSON.stringify(bookmarks)});
+        }
+        console.log('piss');
+
+    });
+
+ 
+        // Check if added
+        chrome.storage.sync.get(['bookmarks'],(data)=>{
+
+        
+            if(data.bookmarks){
+                var bookmarks = JSON.parse(data.bookmarks);
+                // console.log(bookmarks);
+            }else{
+                // console.log('no bookmarks found')
+            }
+            console.log('piss');
+    
+        });
+    // },2000)
+
+
+    
+
+    
+    
     clearTable();
-    showBookmarks();
+    // showBookmarks();
     
 });
 
